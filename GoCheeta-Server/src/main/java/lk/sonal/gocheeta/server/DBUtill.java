@@ -68,16 +68,50 @@ public class DBUtill {
         return admins;
     }
     
-    public List<Admin> getFilterAdmins() {
+    public List<Admin> getFilterAdmins(String branch,String accTYpe, String searchText) {
+        boolean MultipleFilters = false;
         List<Admin> admins = new ArrayList<>();
          try {             
             
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String query = "SELECT * FROM `admin_tbl` WHERE ";
-            PreparedStatement pat =conn.prepareStatement("SELECT * FROM `admin_tbl`");
-            Statement statement = conn.createStatement();
             
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM `admin_tbl`");
+            if(!branch.trim().isEmpty()){
+                query += "BranchID ="+branch;
+                MultipleFilters = true;
+            }
+            
+            if(!accTYpe.trim().isEmpty()){
+                if(MultipleFilters){
+                   query += " AND "; 
+                }
+                query += "AccType='"+accTYpe+"'";
+                MultipleFilters = true;
+            }
+            
+            if(!searchText.trim().isEmpty()){
+                if(MultipleFilters){
+                   query += " AND "; 
+                }
+                
+                query += "(PK_AdminID LIKE ? OR Name LIKE ? OR Email LIKE ? OR PhoneNumber LIKE ? OR Address LIKE ? OR DOB LIKE ? OR Gender LIKE ? OR Username LIKE ?)";
+                MultipleFilters = true;
+                
+            }
+            
+            PreparedStatement pat =conn.prepareStatement(query);
+            if(!searchText.trim().isEmpty()){
+                pat.setString(1, "%"+searchText+"%");
+                pat.setString(2, "%"+searchText+"%");
+                pat.setString(3, "%"+searchText+"%");
+                pat.setString(4, "%"+searchText+"%");
+                pat.setString(5, "%"+searchText+"%");
+                pat.setString(6, "%"+searchText+"%");
+                pat.setString(7, "%"+searchText+"%");
+                pat.setString(8, "%"+searchText+"%");   
+            }
+            
+            ResultSet resultSet = pat.executeQuery();
             while(resultSet.next()) {
                 Admin admin = new Admin();
                 
@@ -106,11 +140,14 @@ public class DBUtill {
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement statement = conn.createStatement();
-            String query = "UPDATE `admin_tbl` SET `Name` = '"+admin.getName()+"', `Email` = '"+admin.getEmail()+"', `PhoneNumber` = '"+admin.getPhoneNumber()+"', `Address` = '"+admin.getAddress()+"', `DOB` = '"+admin.getDOB()+"', `AccType` ='"+admin.getAccType()+"',`BranchID` ='"+admin.getBranch()+"',`Username` = '"+admin.getUsername()+"' ";
+            
+            
+            String query = "UPDATE `admin_tbl` SET `Name` = '"+admin.getName()+"', `Email` = '"+admin.getEmail()+"', `PhoneNumber` = '"+admin.getPhoneNumber()+"', `Address` = '"+admin.getAddress()+"', `DOB` = '"+admin.getDOB()+"', `AccType` ='"+admin.getAccType()+"',`BranchID` ="+  admin.getBranch() +",`Username` = '"+admin.getUsername()+"' ";
             if(!admin.getPassword().trim().isEmpty()){
                 query += ", `Password` = '"+admin.getPassword()+"' ";
             }
             query += "WHERE `PK_AdminID` = "+admin.getId()+"";
+            
             
             System.out.println(query);
             rowsAffected = statement.executeUpdate(query);
@@ -220,6 +257,30 @@ public class DBUtill {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement statement = conn.createStatement();
             rowsAffected = statement.executeUpdate("DELETE FROM `branch_tbl` WHERE `PK_BranchID` = '" + id + "'");
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+        return rowsAffected > 0;
+    }
+    
+    
+    
+//    Vehicle Cateogry
+    
+    public boolean addVCategory(VehicleCategory VCategory) {
+        int rowsAffected = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement pat = conn.prepareStatement("INSERT INTO `vehiclecategory_tbl` (`ImageFileLocation`, `CategoryName`) VALUES (?, ?)");
+            pat.setString(1, VCategory.getImageFileLocation());
+            pat.setString(2, VCategory.getCategoryName());
+         //   pat.setBlob(2, VCategory.getCategoryImg());
+            
+            
+//            Statement statement = conn.createStatement();
+            rowsAffected = pat.executeUpdate();
+           
+            
         } catch(Exception e) {
             System.out.println(e);
         }

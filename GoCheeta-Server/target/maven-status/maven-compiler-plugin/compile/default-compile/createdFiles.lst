@@ -1,5 +1,10 @@
+lk\sonal\gocheeta\server\VehicleServices.class
 lk\sonal\gocheeta\server\AdminServices.class
 lk\sonal\gocheeta\server\BranchServices.class
+lk\sonal\gocheeta\server\ImgFile.class
+lk\sonal\gocheeta\server\VehicleCategory.class
+lk\sonal\gocheeta\server\FileService.class
 lk\sonal\gocheeta\server\DBUtill.class
 lk\sonal\gocheeta\server\Admin.class
 lk\sonal\gocheeta\server\Branch.class
+lk\sonal\gocheeta\server\FileOperation.class
