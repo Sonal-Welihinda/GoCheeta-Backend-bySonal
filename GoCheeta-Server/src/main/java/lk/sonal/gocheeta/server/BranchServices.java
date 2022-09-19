@@ -25,23 +25,26 @@ import javax.ws.rs.core.Response;
 @Path("branch")
 public class BranchServices {
     
+    BL BLayer ; 
+
+    public BranchServices() {
+        BLayer = BL.getInstance();
+        
+    }
+    
+    
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getBranches() {
-        DBUtill util = new DBUtill();
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(util.getBranches());
+        return BLayer.getBranches();
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addBranch(String json) {
-        Gson gson = new GsonBuilder().create();
-        Branch branch = gson.fromJson(json, Branch.class);
-        DBUtill util = new DBUtill();
-        boolean result = util.addBranch(branch);  
-        if (result) {
+        String result = BLayer.addBranch(json);  
+        if (result.split(",")[0].equals("Success")) {
             return Response.status(201).entity("Successfully added").build();
         } else {
             return Response.status(501).entity("Error occurred").build();
@@ -51,11 +54,8 @@ public class BranchServices {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBranch(String json) {
-        Gson gson = new GsonBuilder().create();
-        Branch branch = gson.fromJson(json, Branch.class);
-        DBUtill util = new DBUtill();
-        boolean result = util.updateBranch(branch);    
-        if (result) {
+        String result = BLayer.updateBranch(json);    
+        if (result.split(",")[0].equals("Success")) {
             return Response.status(201).entity("Successfully updated").build();
         } else {
             return Response.status(501).entity("Error occurred").build();
@@ -65,10 +65,10 @@ public class BranchServices {
     
     @DELETE
     @Path("/{id}")
-    public Response deletePerson(@PathParam("id") int id) {
+    public Response deleteBranch(@PathParam("id") int id) {
        DBUtill util = new DBUtill();
-        boolean result = util.deleteBranch(id);    
-        if (result) {
+        String result = BLayer.deleteBranch(id);    
+        if (result.split(",")[0].equals("Success")) {
             return Response.status(201).entity("Branch removed ").build();
         } else {
             return Response.status(501).entity("Error occurred").build();

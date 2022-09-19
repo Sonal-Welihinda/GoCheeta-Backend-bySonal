@@ -1,6 +1,8 @@
 package lk.sonal.gocheeta.server;
 
 
+import lk.sonal.gocheeta.server.Models.Admin;
+import lk.sonal.gocheeta.server.Models.Branch;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

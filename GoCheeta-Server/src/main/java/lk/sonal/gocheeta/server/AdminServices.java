@@ -25,22 +25,25 @@ import javax.ws.rs.core.Response;
 @Path("admin")
 public class AdminServices {
     
+    BL BLayer ; 
+
+    public AdminServices() {
+        BLayer = BL.getInstance();
+        
+    }
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getAdmins() {
-        DBUtill util = new DBUtill();
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(util.getAdmins());
+        
+        return BLayer.getAdmins();
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addAdmin(String json) {
-        Gson gson = new GsonBuilder().create();
-        Admin admin = gson.fromJson(json, Admin.class);
-        DBUtill util = new DBUtill();
-        boolean result = util.addAdmin(admin);  
-        if (result) {
+        String result = BLayer.addAdmin(json);  
+        if (result.split(",")[0].equals("Success")) {
             return Response.status(201).entity("Successfully added").build();
         } else {
             return Response.status(501).entity("Error occurred").build();
@@ -51,11 +54,8 @@ public class AdminServices {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/update")
     public Response UpdateAdmin(String json) {
-        Gson gson = new GsonBuilder().create();
-        Admin admin = gson.fromJson(json, Admin.class);
-        DBUtill util = new DBUtill();
-        boolean result = util.updateAdmin(admin);  
-        if (result) {
+        String result = BLayer.UpdateAdmin(json);  
+        if (result.split(",")[0].equals("Success")) {
             return Response.status(201).entity("Successfully Updated").build();
         } else {
             return Response.status(501).entity("Error occurred").build();
@@ -64,10 +64,9 @@ public class AdminServices {
     
     @DELETE
     @Path("/{id}")
-    public Response deletePerson(@PathParam("id") int id) {
-       DBUtill util = new DBUtill();
-        boolean result = util.deleteAdmin(id);    
-        if (result) {
+    public Response deleteAdmin(@PathParam("id") int id) {
+        String result = BLayer.deleteAdmin(id);    
+        if (result.split(",")[0].equals("Success")) {
             return Response.status(201).entity("Admin removed ").build();
         } else {
             return Response.status(501).entity("Error occurred").build();
@@ -78,9 +77,7 @@ public class AdminServices {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/FilterAdmin")
     public String getFiltersAdmins(@QueryParam("branchID") String bID,@QueryParam("AccType") String AccType ,@QueryParam("SearchTxt") @DefaultValue("") String SearchTxt ) {
-        DBUtill util = new DBUtill();
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(util.getFilterAdmins(bID, AccType, SearchTxt));
+        return BLayer.getFiltersAdmins(bID, AccType, SearchTxt);
     }
     
 }

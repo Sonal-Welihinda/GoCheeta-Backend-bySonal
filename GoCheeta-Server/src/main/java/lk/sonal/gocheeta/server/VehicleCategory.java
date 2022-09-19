@@ -12,16 +12,37 @@ public class VehicleCategory {
     
     private int categoryID;
     String ImageFileLocation;
+    String ImageBase64;
     String CategoryName;
+    boolean ImageUpdated;
 
     public VehicleCategory() {
     }
 
-    public VehicleCategory(int categoryID, String CategoryImg, String CategoryName) {
+    public VehicleCategory(int categoryID, String ImageFileLocation, String ImageBase64, String CategoryName) {
         this.categoryID = categoryID;
-        this.ImageFileLocation = CategoryImg;
+        this.ImageFileLocation = ImageFileLocation;
+        this.ImageBase64 = ImageBase64;
         this.CategoryName = CategoryName;
     }
+
+    public String getImageBase64() {
+        return ImageBase64;
+    }
+
+    public void setImageBase64(String ImageBase64) {
+        this.ImageBase64 = ImageBase64;
+    }
+
+    public boolean isImageUpdated() {
+        return ImageUpdated;
+    }
+
+    public void setImageUpdated(boolean ImageUpdated) {
+        this.ImageUpdated = ImageUpdated;
+    }
+
+    
     
     
 
