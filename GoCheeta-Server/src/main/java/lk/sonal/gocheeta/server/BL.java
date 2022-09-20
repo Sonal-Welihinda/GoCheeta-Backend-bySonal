@@ -26,6 +26,8 @@ import lk.sonal.gocheeta.server.DataLayers.BranchDao;
 import lk.sonal.gocheeta.server.DataLayers.BranchDaoImpl;
 import lk.sonal.gocheeta.server.DataLayers.CustomerDao;
 import lk.sonal.gocheeta.server.DataLayers.CustomerDaoImpl;
+import lk.sonal.gocheeta.server.DataLayers.DaoFactory;
+import lk.sonal.gocheeta.server.DataLayers.DaoInterface;
 import lk.sonal.gocheeta.server.DataLayers.DriverDao;
 import lk.sonal.gocheeta.server.DataLayers.DriverDaoImpl;
 import lk.sonal.gocheeta.server.DataLayers.LocationDao;
@@ -51,15 +53,17 @@ public class BL {
     String Available = "Available";
     
     Gson gson = new GsonBuilder().create();
-    AdminDao AdminDB ;
-    BranchDao BranchDB;
-    VehicleCategoryDao VCategoryDB;
-    VehicleDao VehicleDB;
-    LocationDao LocationDB;
-    CustomerDao customerDB;
-    BookingDao BookingDB;
-    DriverDao DriverDB;
+//    AdminDao AdminDB ;
+//    BranchDao BranchDB;
+//    VehicleCategoryDao VCategoryDB;
+//    VehicleDao VehicleDB;
+//    LocationDao LocationDB;
+//    CustomerDao customerDB;
+//    BookingDao BookingDB;
+//    DriverDao DriverDB;
     FileOperation files;
+    
+    DaoInterface DB_OBJECT;
     
 
     
@@ -69,14 +73,17 @@ public class BL {
     }
     
     public BL(){
-        AdminDB = new AdminDaoImpl();
-        BranchDB = new BranchDaoImpl();
-        VCategoryDB = new VehicleCategoryDaoImpl();
-        VehicleDB = new VehicleDaoImpl();
-        DriverDB = new DriverDaoImpl();
-        LocationDB = new LocationDaoImpl();
-        customerDB = new CustomerDaoImpl();
-        BookingDB = new BookingDaoImpl();
+//        AdminDB = new AdminDaoImpl();
+//        BranchDB = new BranchDaoImpl();
+//        VCategoryDB = new VehicleCategoryDaoImpl();
+//        VehicleDB = new VehicleDaoImpl();
+//        DriverDB = new DriverDaoImpl();
+//        LocationDB = new LocationDaoImpl();
+//        customerDB = new CustomerDaoImpl();
+//        BookingDB = new BookingDaoImpl();
+        
+        DB_OBJECT = DaoFactory.getDatabase("MYSQL");
+        
         
         files = new FileOperation ();
 
@@ -96,7 +103,7 @@ public class BL {
     public String addBranch(String json) {
         
         Branch branch = gson.fromJson(json, Branch.class);
-        boolean result = BranchDB.addBranch(branch);  
+        boolean result = DB_OBJECT.addBranch(branch);  
         
         if(result){
             return "Success, Branch Added";
@@ -109,7 +116,7 @@ public class BL {
     public String updateBranch(String json) {
         
         Branch branch = gson.fromJson(json, Branch.class);
-        boolean result = BranchDB.updateBranch(branch);    
+        boolean result = DB_OBJECT.updateBranch(branch);    
         if (result) {
             return "Success, Branch Updated";
         } else {
@@ -118,7 +125,7 @@ public class BL {
     }
     
     public String deleteBranch(int id) {
-        boolean result = BranchDB.deleteBranch(id);    
+        boolean result = DB_OBJECT.deleteBranch(id);    
         if (result) {
             return "Success, Branch removed";
         } else {
@@ -133,14 +140,14 @@ public class BL {
     
     public String getAdmins() {
         
-        return gson.toJson(AdminDB.getAdmins());
+        return gson.toJson(DB_OBJECT.getAdmins());
     }
     
     public String addAdmin(String json) {
         
         Admin admin = gson.fromJson(json, Admin.class);
         DBUtill util = new DBUtill();
-        boolean result = AdminDB.addAdmin(admin);  
+        boolean result = DB_OBJECT.addAdmin(admin);  
         if (result) {
             return "Success, Successfully added";
         } else {
@@ -150,7 +157,7 @@ public class BL {
     
     public String UpdateAdmin(String json) {
         Admin admin = gson.fromJson(json, Admin.class);
-        boolean result = AdminDB.updateAdmin(admin);  
+        boolean result = DB_OBJECT.updateAdmin(admin);  
         if (result) {
             return "Success, Successfully Updated" ;
         } else {
@@ -160,7 +167,7 @@ public class BL {
     
     public String deleteAdmin(int id) {
        DBUtill util = new DBUtill();
-        boolean result = AdminDB.deleteAdmin(id);    
+        boolean result = DB_OBJECT.deleteAdmin(id);    
         if (result) {
             return "Success, Admin removed ";
         } else {
@@ -169,7 +176,7 @@ public class BL {
     }
     
     public String getFiltersAdmins(String bID,String AccType , String SearchTxt ) {
-        return gson.toJson(AdminDB.getFilterAdmins(bID, AccType, SearchTxt));
+        return gson.toJson(DB_OBJECT.getFilterAdmins(bID, AccType, SearchTxt));
     }
     
 
@@ -190,12 +197,12 @@ public class BL {
         
         vehicle.setImagePath(filename);
         
-        if(!VehicleDB.addVehicle(vehicle)){
+        if(!DB_OBJECT.addVehicle(vehicle)){
             return "Error, while adding Vehicle";
         }
         
         
-        boolean result = VehicleDB.AddVehicleAccessibility(vehicle); 
+        boolean result = DB_OBJECT.AddVehicleAccessibility(vehicle); 
         if (result) {
             return "Success, Successfully added";
         } else {
@@ -204,11 +211,11 @@ public class BL {
     }
     
     public String getVehicles() {
-        List<Vehicle> list = VehicleDB.getVehicles();
+        List<Vehicle> list = DB_OBJECT.getVehicles();
         
         for(Vehicle vehicle : list){
             vehicle.setImageBase64(files.readFile(vehicle.getImagePath()));
-            vehicle.setDriverIds(VehicleDB.getVehicleAccess(vehicle));
+            vehicle.setDriverIds(DB_OBJECT.getVehicleAccess(vehicle));
         }
         
         
@@ -228,17 +235,17 @@ public class BL {
             
         }
         
-        if(!VehicleDB.updateVehicle(vehicle)){
+        if(!DB_OBJECT.updateVehicle(vehicle)){
             throw new Exception("Something went while Updateing Vehicle");
         }
-        driverID = VehicleDB.getVehicleAccess(vehicle);
+        driverID = DB_OBJECT.getVehicleAccess(vehicle);
         
         if(!vehicle.getDriverIds().equals(driverID)){
             
             
             for(int Id : driverID){
                 if(!vehicle.getDriverIds().contains(Id)){
-                    if(!VehicleDB.deleteVehicleAccess(vehicle, Id)){
+                    if(!DB_OBJECT.deleteVehicleAccess(vehicle, Id)){
                         throw new Exception("Something went while removing Vehicle Access");
                     }
                 }
@@ -246,7 +253,7 @@ public class BL {
             
             for(int Id : vehicle.getDriverIds()){
                 if(!driverID.contains(Id)){
-                    if(!VehicleDB.AddOneVehicleAccessibility(vehicle, Id)){
+                    if(!DB_OBJECT.AddOneVehicleAccessibility(vehicle, Id)){
                         throw new Exception("Something went while Adding Vehicle Access");
                     }
                 }
@@ -255,7 +262,7 @@ public class BL {
             
         }
        
-        boolean result = VehicleDB.updateVehicle(vehicle);  
+        boolean result = DB_OBJECT.updateVehicle(vehicle);  
         if (result) {
             return "Success, Successfully Updated" ;
         } else {
@@ -284,7 +291,7 @@ public class BL {
         
         vCategory.setImageFileLocation(filename);
         
-        boolean result = VCategoryDB.addVCategory(vCategory);  
+        boolean result = DB_OBJECT.addVCategory(vCategory);  
         if (result) {
             return "Success, Successfully added";
         } else {
@@ -293,7 +300,7 @@ public class BL {
     }
     
     public String getVCategories() {
-        List<VehicleCategory> list = VCategoryDB.getCategories();
+        List<VehicleCategory> list = DB_OBJECT.getCategories();
         
         for(VehicleCategory vCategory : list){
             vCategory.setImageBase64(files.readFile(vCategory.getImageFileLocation()));
@@ -321,7 +328,7 @@ public class BL {
 
             }
             
-            if(VCategoryDB.updateVCategory(vCategory)){
+            if(DB_OBJECT.updateVCategory(vCategory)){
                 return "Success, Successfully Updated";
             }
         
@@ -351,7 +358,7 @@ public class BL {
             
             driver.setImgLocation(fileName);
             
-            boolean result = DriverDB.addDriver(driver); 
+            boolean result = DB_OBJECT.addDriver(driver); 
             
             
             if (result) {
@@ -367,7 +374,7 @@ public class BL {
     }
 
     public String getDrivers() {
-        List<Driver> list = DriverDB.getDrivers();
+        List<Driver> list = DB_OBJECT.getDrivers();
         
         for(Driver driver : list){
             driver.setImgbase64(files.readFile(driver.getImgLocation()));
@@ -392,7 +399,7 @@ public class BL {
             Logger.getLogger(BL.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        boolean result = DriverDB.updateDriver(driver);  
+        boolean result = DB_OBJECT.updateDriver(driver);  
         if (result) {
             return "Success, Successfully Updated" ;
         } else {
@@ -403,7 +410,7 @@ public class BL {
     public String LoginDriver(String json){
         Driver driver = gson.fromJson(json, Driver.class);
         
-        driver = DriverDB.DriverLogin(driver);
+        driver = DB_OBJECT.DriverLogin(driver);
         
         if(driver == null){
             return "Error, No Driver Found";
@@ -422,7 +429,7 @@ public class BL {
     public String addLocation(String json){
         Location location = gson.fromJson(json, Location.class);
         
-        if(LocationDB.AddLocation(location)){
+        if(DB_OBJECT.AddLocation(location)){
             return  "Success, Successfully Updated" ;
         }else{
             return "Error, Error occurred";
@@ -431,15 +438,15 @@ public class BL {
     }
     
     public String getLocations(){
-        return gson.toJson(LocationDB.getLocations());
+        return gson.toJson(DB_OBJECT.getLocations());
     }
     
     public String getLocationsNames(){
-        return gson.toJson(LocationDB.getLocationsNames());
+        return gson.toJson(DB_OBJECT.getLocationsNames());
     }
     
     public String getRelatedLocations(String location){
-        return gson.toJson(LocationDB.getRelatedLocations(location));
+        return gson.toJson(DB_OBJECT.getRelatedLocations(location));
     }
     
     
@@ -455,11 +462,11 @@ public class BL {
     public String RegisterCustomer(String json){
         Customer customer = gson.fromJson(json, Customer.class);
         
-        if(customerDB.checkForCustomerAccount(customer)){
+        if(DB_OBJECT.checkForCustomerAccount(customer)){
             return "Error, There is Already Account with this number";
         }
         
-        if(customerDB.registerCustomer(customer)){
+        if(DB_OBJECT.registerCustomer(customer)){
             return  "Success, Successfully Registered";
         }else{
             return "Error, Error occurred";
@@ -470,7 +477,7 @@ public class BL {
     public String CustomerLogin(String json){
         Customer customer = gson.fromJson(json, Customer.class);
         
-        customer = customerDB.LoginCustomer(customer);
+        customer = DB_OBJECT.LoginCustomer(customer);
         if(customer == null){
             return "error, invalide credentials";
         }
@@ -496,21 +503,21 @@ public class BL {
         Booking booking = gson.fromJson(json, Booking.class);
         
         System.out.println(booking.getVehicle().getDriverIds());
-        List<Integer> Drivers = VehicleDB.getVehicleAccess(booking.getVehicle());
+        List<Integer> Drivers = DB_OBJECT.getVehicleAccess(booking.getVehicle());
         
         if(Drivers.size()<0){
             return "Error, No Available Drivers found";
         }
         booking.setDriversId(Drivers.get(0));
-        DriverDB.updateDriverStatus(Drivers.get(0), ONRIDE);
-        VehicleDB.updateVehicleStatus(booking.getVehicle().getPlateNumber(), ONRIDE);
+        DB_OBJECT.updateDriverStatus(Drivers.get(0), ONRIDE);
+        DB_OBJECT.updateVehicleStatus(booking.getVehicle().getPlateNumber(), ONRIDE);
         LocalDateTime date = LocalDateTime.now();
         
         booking.setCreatedDate(date.toString());
         booking.setStatus("Ongoing");
         
         
-        if(!BookingDB.AddBookng(booking)){
+        if(!DB_OBJECT.AddBookng(booking)){
             return  "Error, Something went wrong while adding the booking";
         }
         
@@ -519,13 +526,13 @@ public class BL {
     }
     
     public String getDriversActiveBookings(int i){
-        return gson.toJson(BookingDB.getDriversActiveBooking(i)) ;
+        return gson.toJson(DB_OBJECT.getDriversActiveBooking(i)) ;
     }
     
     
     public boolean updateBookingStatus(int i, String status){
         
-        return BookingDB.updateBookingStatus(i, status);
+        return DB_OBJECT.updateBookingStatus(i, status);
     }
     
     
