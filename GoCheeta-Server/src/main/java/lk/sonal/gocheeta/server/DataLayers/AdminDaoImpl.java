@@ -55,7 +55,7 @@ public class AdminDaoImpl implements AdminDao{
            while(resultSet.next()) {
                Admin admin = new Admin();
 
-               admin.setId(resultSet.getString("PK_AdminID"));
+               admin.setId(resultSet.getInt("PK_AdminID"));
                admin.setName(resultSet.getString("Name"));
                admin.setEmail(resultSet.getString("Email"));
                admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
@@ -123,7 +123,7 @@ public class AdminDaoImpl implements AdminDao{
             while(resultSet.next()) {
                 Admin admin = new Admin();
                 
-                admin.setId(resultSet.getString("PK_AdminID"));
+                admin.setId(resultSet.getInt("PK_AdminID"));
                 admin.setName(resultSet.getString("Name"));
                 admin.setEmail(resultSet.getString("Email"));
                 admin.setPhoneNumber(resultSet.getString("PhoneNumber"));

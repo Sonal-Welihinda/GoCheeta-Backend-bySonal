@@ -49,9 +49,19 @@ public class BookingService {
         return result;
     }
     
-    @POST
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/History/{i}")
+    public String getDriverCompletedBooking(@PathParam("i") int  i) {
+        String result = BLayer.getDriversCompletedBookings(i);
+        
+        return result;
+    }
+    
+    
+    @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{i}/{Status}")
+    @Path("/Status/{i}/{Status}")
     public Response updateBookingStatus(@PathParam("i") int  i,@PathParam("Status") String  Status){
         boolean result = BLayer.updateBookingStatus(i,Status);
         if (result) {

@@ -179,6 +179,19 @@ public class BL {
         return gson.toJson(DB_OBJECT.getFilterAdmins(bID, AccType, SearchTxt));
     }
     
+    public String LoginAdmin(String json){
+        Admin admin = gson.fromJson(json, Admin.class);
+        
+        admin = DB_OBJECT.AdminLogin(admin);
+        
+        if(admin == null){
+            return "Error, No Admin Found";
+        }
+        
+        
+        return gson.toJson(admin);
+    }
+    
 
 //    
 //    Vehicle 
@@ -420,6 +433,40 @@ public class BL {
         
         return gson.toJson(driver);
     }
+    
+    public String getDriver(String json){
+        Driver driver = gson.fromJson(json, Driver.class);
+        
+        driver = DB_OBJECT.getDriver(driver);
+        
+        if(driver == null){
+            return "Error, No Driver Found";
+        }
+        
+        driver.setImgbase64(files.readFile(driver.getImgLocation()));
+        
+        return gson.toJson(driver);
+    }
+    
+    public String DriverChangePassoword(String newPass,String json){
+        Driver driver = gson.fromJson(json, Driver.class);
+        
+        driver = DB_OBJECT.DriverLogin(driver);
+        
+        if(driver == null){
+            return "Error, incorrect password";
+        }
+        
+        driver.setPassword(newPass);
+        
+        if(DB_OBJECT.updateDriver(driver)){
+            return "Success, Password Changed" ;
+        }else{
+            return "Error, Unable to update password";
+        }
+    }
+    
+    
 
 //    
 //    
@@ -527,6 +574,10 @@ public class BL {
     
     public String getDriversActiveBookings(int i){
         return gson.toJson(DB_OBJECT.getDriversActiveBooking(i)) ;
+    }
+    
+    public String getDriversCompletedBookings(int i){
+        return gson.toJson(DB_OBJECT.getDriversCompletedBookings(i)) ;
     }
     
     

@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -80,7 +81,29 @@ public class DriverServices {
         return Response.status(201).entity(result).build();
     }
     
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("viewDriver")
+    public Response getDriver(String json ) {
+        String result = BLayer.getDriver(json);    
+        if (result.split(",")[0].equals("Error")) {
+            return Response.status(501).entity("No user found").build();
+        }
+        return Response.status(201).entity(result).build();
+    }
     
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("changepassword/{newPass}")
+    public Response DriverChangepassword(@PathParam("newPass") String newPass, String json ) {
+        String result = BLayer.DriverChangePassoword(newPass,json);    
+        if (result.split(",")[0].equals("Success")) {
+            return Response.status(201).entity("Driver password Chnaged").build();
+        } else {
+            return Response.status(501).entity("Error occurred while updateing password").build();
+        }
+    }
     
     
 }

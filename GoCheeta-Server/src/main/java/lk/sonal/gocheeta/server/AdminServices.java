@@ -80,6 +80,18 @@ public class AdminServices {
         return BLayer.getFiltersAdmins(bID, AccType, SearchTxt);
     }
     
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("login")
+    public Response AdminLogin(String json ) {
+        String result = BLayer.LoginAdmin(json);    
+        if (result.split(",")[0].equals("Error")) {
+            return Response.status(501).entity("No user found").build();
+        }
+        return Response.status(201).entity(result).build();
+    }
+    
 }
 
 

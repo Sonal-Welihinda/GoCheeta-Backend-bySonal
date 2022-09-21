@@ -10,7 +10,8 @@ package lk.sonal.gocheeta.server.Models;
  * @author sonal
  */
 public class Admin {
-    private String id,name,email,phoneNumber,address,DOB,AccType,branch,gender,username,password;
+    int Id;
+    private String name,email,phoneNumber,address,DOB,AccType,branch,gender,username,password;
 
     public Admin() {
     }
@@ -28,12 +29,12 @@ public class Admin {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public int getId() {
+        return Id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(int id) {
+        this.Id = id;
        
     }
     

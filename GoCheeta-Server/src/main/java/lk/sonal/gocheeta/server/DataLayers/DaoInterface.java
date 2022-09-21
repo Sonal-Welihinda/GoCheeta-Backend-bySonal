@@ -24,11 +24,12 @@ public interface DaoInterface {
     public List<Admin> getFilterAdmins(String branch,String accTYpe, String searchText);
     public boolean updateAdmin(Admin admin);
     public boolean deleteAdmin(int id);
-    
+    public Admin AdminLogin(Admin admin);
     
     public boolean AddBookng(Booking booking);
     public Booking getDriversActiveBooking(int DriverID);
     public boolean updateBookingStatus (int bookingID,String status);
+    public List<Booking> getDriversCompletedBookings(int i);
     
     
     public boolean addBranch(Branch branch);
@@ -48,6 +49,7 @@ public interface DaoInterface {
     public boolean updateDriver(Driver driver);
     public boolean updateDriverStatus(int DriverID,String status);
     public Driver DriverLogin(Driver driver);
+    public Driver getDriver(Driver driver);
     
     
     

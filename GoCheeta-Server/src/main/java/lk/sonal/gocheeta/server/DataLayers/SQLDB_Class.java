@@ -67,7 +67,7 @@ public class SQLDB_Class implements DaoInterface{
            while(resultSet.next()) {
                Admin admin = new Admin();
 
-               admin.setId(resultSet.getString("PK_AdminID"));
+               admin.setId(resultSet.getInt("PK_AdminID"));
                admin.setName(resultSet.getString("Name"));
                admin.setEmail(resultSet.getString("Email"));
                admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
@@ -135,7 +135,7 @@ public class SQLDB_Class implements DaoInterface{
             while(resultSet.next()) {
                 Admin admin = new Admin();
                 
-                admin.setId(resultSet.getString("PK_AdminID"));
+                admin.setId(resultSet.getInt("PK_AdminID"));
                 admin.setName(resultSet.getString("Name"));
                 admin.setEmail(resultSet.getString("Email"));
                 admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
@@ -192,7 +192,42 @@ public class SQLDB_Class implements DaoInterface{
         return rowsAffected > 0;
     }
 
-    
+    @Override
+    public Admin AdminLogin(Admin admin) {
+        Admin admin1 = null;
+        try {             
+
+
+           String query = "SELECT * FROM `admin_tbl` WHERE `Email`=? AND Password=?" ;
+           
+           PreparedStatement pat = conn.prepareStatement(query);
+           pat.setString(1, admin.getEmail());
+           pat.setString(2, admin.getPassword());
+           
+           ResultSet resultSet = pat.executeQuery();
+           
+           
+           if(resultSet.next()) {
+               admin1 = new Admin();
+                admin1.setId(resultSet.getInt("PK_AdminID"));
+                admin1.setName(resultSet.getString("Name"));
+                admin1.setEmail(resultSet.getString("Email"));
+                admin1.setPhoneNumber(resultSet.getString("PhoneNumber"));
+                admin1.setAddress(resultSet.getString("Address"));
+                admin1.setDOB(resultSet.getString("DOB"));
+                admin1.setAccType(resultSet.getString("AccType"));
+                admin1.setBranch(resultSet.getString("BranchID"));
+                admin1.setGender(resultSet.getString("Gender"));
+                admin1.setUsername(resultSet.getString("Username"));
+                admin1.setPassword("");
+               
+
+           }
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+        return admin1;
+    }
     
     
     
@@ -263,6 +298,46 @@ public class SQLDB_Class implements DaoInterface{
         }
         return booking;
     }
+    
+    
+    @Override
+    public List<Booking> getDriversCompletedBookings(int i) {
+        
+        List<Booking> bookings = new ArrayList();
+        try{
+            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.* from  booking_tbl WHERE DriverID=? AND Status='Complete'");
+            pat.setInt(1, i);
+            
+            ResultSet resultSet = pat.executeQuery();
+            
+            while(resultSet.next()) {
+               Booking booking = new Booking();
+               booking.setBookingID(resultSet.getInt("PK_BookingID"));
+               booking.setCreatedDate(resultSet.getString("CreatedDate"));
+               booking.setBookingTime(resultSet.getString("BookingTime"));
+               booking.setCustormerId(resultSet.getInt("CustormerID"));
+               booking.setDriversId(resultSet.getInt("DriverID"));
+               booking.setVehicleID(resultSet.getString("VehicleID"));
+               booking.setCustomerName(resultSet.getString("CustormerName"));
+               booking.setSource(resultSet.getString("sourceLocation"));
+               booking.setDestination(resultSet.getString("Destination"));
+               booking.setPrice(resultSet.getBigDecimal("Price"));
+               booking.setStatus(resultSet.getString("Status"));
+               booking.setDistance(resultSet.getBigDecimal("Distance"));
+               booking.setCustomerPhoneNumber(resultSet.getString("PhoneNumber"));
+               
+               bookings.add(booking);
+           }
+            
+            
+        } catch(Exception e){
+            System.out.print(e.getMessage());
+        
+        }
+        return bookings;
+    }
+    
+    
 
     @Override
     public boolean updateBookingStatus(int i, String string) {
@@ -622,7 +697,7 @@ public class SQLDB_Class implements DaoInterface{
         int rawCount = 0;
         try {             
 
-           Statement statement = conn.createStatement();
+
            String query = "SELECT * FROM `driver_tbl` WHERE `Email`=? AND Password=?" ;
            
            PreparedStatement pat = conn.prepareStatement(query);
@@ -644,7 +719,6 @@ public class SQLDB_Class implements DaoInterface{
                driver1.setBranchID(resultSet.getInt("BranchID"));
                driver1.setGender(resultSet.getString("Gender"));
                driver1.setUsername(resultSet.getString("Username"));
-               driver1.setPassword(resultSet.getString("Password"));
                driver1.setStatus(resultSet.getString("Status"));
                
 
@@ -655,6 +729,43 @@ public class SQLDB_Class implements DaoInterface{
         return driver1;
     }
     
+    @Override
+    public Driver getDriver(Driver driver) {
+        
+        Driver driver1 = null;
+        int rawCount = 0;
+        try {             
+
+
+           String query = "SELECT * FROM `driver_tbl` WHERE `Email`=? " ;
+           
+           PreparedStatement pat = conn.prepareStatement(query);
+           pat.setString(1, driver.getEmail());
+           
+           ResultSet resultSet = pat.executeQuery();
+           
+           
+           if(resultSet.next()) {
+               driver1 = new Driver();
+               driver1.setId(resultSet.getInt("PK_DriverID"));
+               driver1.setImgLocation(resultSet.getString("ImageLocation"));
+               driver1.setName(resultSet.getString("Name"));
+               driver1.setEmail(resultSet.getString("Email"));
+               driver1.setContactNumber(resultSet.getString("PhoneNumber"));
+               driver1.setAddress(resultSet.getString("Address"));
+               driver1.setDOB(resultSet.getString("DOB"));
+               driver1.setBranchID(resultSet.getInt("BranchID"));
+               driver1.setGender(resultSet.getString("Gender"));
+               driver1.setUsername(resultSet.getString("Username"));
+               driver1.setStatus(resultSet.getString("Status"));
+               
+
+           }
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+        return driver1;
+    }
     
     
 
@@ -1061,5 +1172,7 @@ public class SQLDB_Class implements DaoInterface{
         }
         return DriverIds;
     }
+
+    
     
 }

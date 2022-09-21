@@ -39,103 +39,103 @@ public class DBUtill {
         return rowsAffected > 0;
     }
     
-    public List<Admin> getAdmins() {
-        List<Admin> admins = new ArrayList<>();
-         try {             
-            
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            Statement statement = conn.createStatement();
-            
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM `admin_tbl`");
-            while(resultSet.next()) {
-                Admin admin = new Admin();
-                
-                admin.setId(resultSet.getString("PK_AdminID"));
-                admin.setName(resultSet.getString("Name"));
-                admin.setEmail(resultSet.getString("Email"));
-                admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
-                admin.setAddress(resultSet.getString("Address"));
-                admin.setDOB(resultSet.getString("DOB"));
-                admin.setAccType(resultSet.getString("AccType"));
-                admin.setBranch(resultSet.getString("BranchID"));
-                admin.setGender(resultSet.getString("Gender"));
-                admin.setUsername(resultSet.getString("Username"));
-                admin.setPassword("");
-                
-                admins.add(admin);
-            }
-        } catch(Exception e) {
-            System.out.println(e);
-        }
-        return admins;
-    }
-    
-    public List<Admin> getFilterAdmins(String branch,String accTYpe, String searchText) {
-        boolean MultipleFilters = false;
-        List<Admin> admins = new ArrayList<>();
-         try {             
-            
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String query = "SELECT * FROM `admin_tbl` WHERE ";
-            
-            if(!branch.trim().isEmpty()){
-                query += "BranchID ="+branch;
-                MultipleFilters = true;
-            }
-            
-            if(!accTYpe.trim().isEmpty()){
-                if(MultipleFilters){
-                   query += " AND "; 
-                }
-                query += "AccType='"+accTYpe+"'";
-                MultipleFilters = true;
-            }
-            
-            if(!searchText.trim().isEmpty()){
-                if(MultipleFilters){
-                   query += " AND "; 
-                }
-                
-                query += "(PK_AdminID LIKE ? OR Name LIKE ? OR Email LIKE ? OR PhoneNumber LIKE ? OR Address LIKE ? OR DOB LIKE ? OR Gender LIKE ? OR Username LIKE ?)";
-                MultipleFilters = true;
-                
-            }
-            
-            PreparedStatement pat =conn.prepareStatement(query);
-            if(!searchText.trim().isEmpty()){
-                pat.setString(1, "%"+searchText+"%");
-                pat.setString(2, "%"+searchText+"%");
-                pat.setString(3, "%"+searchText+"%");
-                pat.setString(4, "%"+searchText+"%");
-                pat.setString(5, "%"+searchText+"%");
-                pat.setString(6, "%"+searchText+"%");
-                pat.setString(7, "%"+searchText+"%");
-                pat.setString(8, "%"+searchText+"%");   
-            }
-            
-            ResultSet resultSet = pat.executeQuery();
-            while(resultSet.next()) {
-                Admin admin = new Admin();
-                
-                admin.setId(resultSet.getString("PK_AdminID"));
-                admin.setName(resultSet.getString("Name"));
-                admin.setEmail(resultSet.getString("Email"));
-                admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
-                admin.setAddress(resultSet.getString("Address"));
-                admin.setDOB(resultSet.getString("DOB"));
-                admin.setAccType(resultSet.getString("AccType"));
-                admin.setBranch(resultSet.getString("BranchID"));
-                admin.setGender(resultSet.getString("Gender"));
-                admin.setUsername(resultSet.getString("Username"));
-                admin.setPassword("");
-                
-                admins.add(admin);
-            }
-        } catch(Exception e) {
-            System.out.println(e);
-        }
-        return admins;
-    }
+//    public List<Admin> getAdmins() {
+//        List<Admin> admins = new ArrayList<>();
+//         try {             
+//            
+//            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+//            Statement statement = conn.createStatement();
+//            
+//            ResultSet resultSet = statement.executeQuery("SELECT * FROM `admin_tbl`");
+//            while(resultSet.next()) {
+//                Admin admin = new Admin();
+//                
+//                admin.setId(resultSet.getString("PK_AdminID"));
+//                admin.setName(resultSet.getString("Name"));
+//                admin.setEmail(resultSet.getString("Email"));
+//                admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
+//                admin.setAddress(resultSet.getString("Address"));
+//                admin.setDOB(resultSet.getString("DOB"));
+//                admin.setAccType(resultSet.getString("AccType"));
+//                admin.setBranch(resultSet.getString("BranchID"));
+//                admin.setGender(resultSet.getString("Gender"));
+//                admin.setUsername(resultSet.getString("Username"));
+//                admin.setPassword("");
+//                
+//                admins.add(admin);
+//            }
+//        } catch(Exception e) {
+//            System.out.println(e);
+//        }
+//        return admins;
+//    }
+//    
+//    public List<Admin> getFilterAdmins(String branch,String accTYpe, String searchText) {
+//        boolean MultipleFilters = false;
+//        List<Admin> admins = new ArrayList<>();
+//         try {             
+//            
+//            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+//            String query = "SELECT * FROM `admin_tbl` WHERE ";
+//            
+//            if(!branch.trim().isEmpty()){
+//                query += "BranchID ="+branch;
+//                MultipleFilters = true;
+//            }
+//            
+//            if(!accTYpe.trim().isEmpty()){
+//                if(MultipleFilters){
+//                   query += " AND "; 
+//                }
+//                query += "AccType='"+accTYpe+"'";
+//                MultipleFilters = true;
+//            }
+//            
+//            if(!searchText.trim().isEmpty()){
+//                if(MultipleFilters){
+//                   query += " AND "; 
+//                }
+//                
+//                query += "(PK_AdminID LIKE ? OR Name LIKE ? OR Email LIKE ? OR PhoneNumber LIKE ? OR Address LIKE ? OR DOB LIKE ? OR Gender LIKE ? OR Username LIKE ?)";
+//                MultipleFilters = true;
+//                
+//            }
+//            
+//            PreparedStatement pat =conn.prepareStatement(query);
+//            if(!searchText.trim().isEmpty()){
+//                pat.setString(1, "%"+searchText+"%");
+//                pat.setString(2, "%"+searchText+"%");
+//                pat.setString(3, "%"+searchText+"%");
+//                pat.setString(4, "%"+searchText+"%");
+//                pat.setString(5, "%"+searchText+"%");
+//                pat.setString(6, "%"+searchText+"%");
+//                pat.setString(7, "%"+searchText+"%");
+//                pat.setString(8, "%"+searchText+"%");   
+//            }
+//            
+//            ResultSet resultSet = pat.executeQuery();
+//            while(resultSet.next()) {
+//                Admin admin = new Admin();
+//                
+//                admin.setId(resultSet.getString("PK_AdminID"));
+//                admin.setName(resultSet.getString("Name"));
+//                admin.setEmail(resultSet.getString("Email"));
+//                admin.setPhoneNumber(resultSet.getString("PhoneNumber"));
+//                admin.setAddress(resultSet.getString("Address"));
+//                admin.setDOB(resultSet.getString("DOB"));
+//                admin.setAccType(resultSet.getString("AccType"));
+//                admin.setBranch(resultSet.getString("BranchID"));
+//                admin.setGender(resultSet.getString("Gender"));
+//                admin.setUsername(resultSet.getString("Username"));
+//                admin.setPassword("");
+//                
+//                admins.add(admin);
+//            }
+//        } catch(Exception e) {
+//            System.out.println(e);
+//        }
+//        return admins;
+//    }
     
     public boolean updateAdmin(Admin admin) {
         int rowsAffected = 0;
