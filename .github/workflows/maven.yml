@@ -23,4 +23,5 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      working-directory: /GoCheeta-Server
+      run: mvn -B package --file pom.xml -Dmaven.test.skip=true
