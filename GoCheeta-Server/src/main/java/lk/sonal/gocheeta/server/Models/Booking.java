@@ -12,9 +12,9 @@ import java.math.BigDecimal;
  */
 public class Booking {
     int bookingID;
-    String Source,Destination,CustomerName,CustomerPhoneNumber;
+    String Source,Destination,CustomerName,CustomerPhoneNumber,DriverName,RateMsg, BranchName;
     int CustormerId;
-    int DriversId;
+    int DriversId,Rate;
     Vehicle vehicle; 
     BigDecimal price,Distance;
     String CreatedDate,BookingTime,Status,VehicleID;
@@ -22,12 +22,47 @@ public class Booking {
     public Booking() {
     }
 
+    public String getRateMsg() {
+        return RateMsg;
+    }
+
+    public void setRateMsg(String RateMsg) {
+        this.RateMsg = RateMsg;
+    }
+
+    public int getRate() {
+        return Rate;
+    }
+
+    public void setRate(int Rate) {
+        this.Rate = Rate;
+    }
+
+    public String getBranchName() {
+        return BranchName;
+    }
+
+    public void setBranchName(String BranchName) {
+        this.BranchName = BranchName;
+    }
+
+    
+    
+    
     public String getCustomerPhoneNumber() {
         return CustomerPhoneNumber;
     }
 
     public void setCustomerPhoneNumber(String CustomerPhoneNumber) {
         this.CustomerPhoneNumber = CustomerPhoneNumber;
+    }
+
+    public String getDriverName() {
+        return DriverName;
+    }
+
+    public void setDriverName(String DriverName) {
+        this.DriverName = DriverName;
     }
 
     
@@ -50,6 +85,7 @@ public class Booking {
     public void setStatus(String Status) {
         this.Status = Status;
     }
+    
     
 
     public String getCustomerName() {

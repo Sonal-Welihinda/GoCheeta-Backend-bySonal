@@ -267,7 +267,7 @@ public class SQLDB_Class implements DaoInterface{
         
         Booking booking = null;
         try{
-            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.* from  booking_tbl WHERE DriverID=? AND Status='Ongoing'");
+            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.*,`customer-tbl`.PhoneNumber from  booking_tbl inner join `customer-tbl` on booking_tbl.CustormerID = `customer-tbl`.PK_CustomerID  WHERE DriverID=? AND Status='Ongoing'");
             pat.setInt(1, i);
             
             ResultSet resultSet = pat.executeQuery();
@@ -305,7 +305,7 @@ public class SQLDB_Class implements DaoInterface{
         
         List<Booking> bookings = new ArrayList();
         try{
-            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.* from  booking_tbl WHERE DriverID=? AND Status='Complete'");
+            PreparedStatement pat = conn.prepareStatement("Select * from  booking_tbl WHERE DriverID=? AND (Status='Complete' OR Status='Cancel'  )");
             pat.setInt(1, i);
             
             ResultSet resultSet = pat.executeQuery();
@@ -324,7 +324,7 @@ public class SQLDB_Class implements DaoInterface{
                booking.setPrice(resultSet.getBigDecimal("Price"));
                booking.setStatus(resultSet.getString("Status"));
                booking.setDistance(resultSet.getBigDecimal("Distance"));
-               booking.setCustomerPhoneNumber(resultSet.getString("PhoneNumber"));
+               
                
                bookings.add(booking);
            }
@@ -336,6 +336,163 @@ public class SQLDB_Class implements DaoInterface{
         }
         return bookings;
     }
+    
+    
+    @Override
+    public List<Booking> getCustomerBookingHistory(int i) {
+        
+        List<Booking> bookings = new ArrayList();
+        try{
+            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.*,driver_tbl.Name as DriverName from booking_tbl inner join driver_tbl ON booking_tbl.DriverID = driver_tbl.PK_DriverID WHERE booking_tbl.CustormerID=? AND (booking_tbl.Status='Complete' OR booking_tbl.Status='Cancel' )");
+            pat.setInt(1, i);
+            
+            ResultSet resultSet = pat.executeQuery();
+            
+            while(resultSet.next()) {
+               Booking booking = new Booking();
+               booking.setBookingID(resultSet.getInt("PK_BookingID"));
+               booking.setCreatedDate(resultSet.getString("CreatedDate"));
+               booking.setBookingTime(resultSet.getString("BookingTime"));
+               booking.setCustormerId(resultSet.getInt("CustormerID"));
+               booking.setDriversId(resultSet.getInt("DriverID"));
+               booking.setVehicleID(resultSet.getString("VehicleID"));
+               booking.setCustomerName(resultSet.getString("CustormerName"));
+               booking.setSource(resultSet.getString("sourceLocation"));
+               booking.setDestination(resultSet.getString("Destination"));
+               booking.setPrice(resultSet.getBigDecimal("Price"));
+               booking.setStatus(resultSet.getString("Status"));
+               booking.setDistance(resultSet.getBigDecimal("Distance"));
+               booking.setDriverName(resultSet.getString("DriverName"));
+               booking.setRate(resultSet.getInt("Rate"));
+               booking.setRateMsg(resultSet.getString("RateMsg"));
+               
+               
+               bookings.add(booking);
+           }
+            
+            
+        } catch(Exception e){
+            System.out.print(e.getMessage());
+        
+        }
+        return bookings;
+    }
+    
+    
+    @Override
+    public List<Booking> getAllBookings() {
+        List<Booking> bookings = new ArrayList();
+        try{
+            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.*,driver_tbl.Name as DriverName, `customer-tbl`.PhoneNumber as CustomerPhoneNumber  from (( booking_tbl inner join driver_tbl ON booking_tbl.DriverID = driver_tbl.PK_DriverID ) inner join `customer-tbl` on booking_tbl.CustormerID = `customer-tbl`.PK_CustomerID)");
+
+            
+            ResultSet resultSet = pat.executeQuery();
+            
+            while(resultSet.next()) {
+               Booking booking = new Booking();
+               booking.setBookingID(resultSet.getInt("PK_BookingID"));
+               booking.setCreatedDate(resultSet.getString("CreatedDate"));
+               booking.setBookingTime(resultSet.getString("BookingTime"));
+               booking.setCustormerId(resultSet.getInt("CustormerID"));
+               booking.setDriversId(resultSet.getInt("DriverID"));
+               booking.setVehicleID(resultSet.getString("VehicleID"));
+               booking.setCustomerName(resultSet.getString("CustormerName"));
+               booking.setCustomerPhoneNumber(resultSet.getString("CustomerPhoneNumber"));
+               booking.setSource(resultSet.getString("sourceLocation"));
+               booking.setDestination(resultSet.getString("Destination"));
+               booking.setPrice(resultSet.getBigDecimal("Price"));
+               booking.setStatus(resultSet.getString("Status"));
+               booking.setDistance(resultSet.getBigDecimal("Distance"));
+               booking.setDriverName(resultSet.getString("DriverName"));
+               booking.setRate(resultSet.getInt("Rate"));
+               booking.setRateMsg(resultSet.getString("RateMsg"));
+               
+               
+               bookings.add(booking);
+           }
+            
+            
+        } catch(Exception e){
+            System.out.print(e.getMessage());
+        
+        }
+        return bookings;
+    }
+    
+    
+    
+    @Override
+    public Booking getCustomerActiveBooking(int customerID) {
+        
+        Booking booking = null;
+        try{
+            PreparedStatement pat = conn.prepareStatement("Select booking_tbl.*,driver_tbl.PhoneNumber, driver_tbl.Name as DriverName from booking_tbl INNER JOIN driver_tbl on booking_tbl.DriverID = driver_tbl.PK_DriverID  WHERE booking_tbl.CustormerID=? AND booking_tbl.Status='Ongoing'");
+            pat.setInt(1, customerID);
+            
+            ResultSet resultSet = pat.executeQuery();
+            
+            if(resultSet.next()) {
+               booking = new Booking();
+               booking.setBookingID(resultSet.getInt("PK_BookingID"));
+               booking.setCreatedDate(resultSet.getString("CreatedDate"));
+               booking.setBookingTime(resultSet.getString("BookingTime"));
+               booking.setCustormerId(resultSet.getInt("CustormerID"));
+               booking.setDriversId(resultSet.getInt("DriverID"));
+               booking.setVehicleID(resultSet.getString("VehicleID"));
+               booking.setCustomerName(resultSet.getString("CustormerName"));
+               booking.setSource(resultSet.getString("sourceLocation"));
+               booking.setDestination(resultSet.getString("Destination"));
+               booking.setPrice(resultSet.getBigDecimal("Price"));
+               booking.setStatus(resultSet.getString("Status"));
+               booking.setDistance(resultSet.getBigDecimal("Distance"));
+               booking.setCustomerPhoneNumber(resultSet.getString("PhoneNumber"));
+               booking.setDriverName(resultSet.getString("DriverName"));
+//               booking.setRate(resultSet.getInt("Rate"));
+//               booking.setRateMsg(resultSet.getString("RateMsg"));
+               
+
+           }
+            
+            
+        } catch(Exception e){
+        
+        
+        }
+        return booking;
+    }
+    
+    @Override
+    public List<Booking> getBookingSales(String startDate, String BranchID, String endDates) {
+        List<Booking> bookings = new ArrayList();
+        try{
+            PreparedStatement pat = conn.prepareStatement("SELECT sum(gocheeta.booking_tbl.Price) as BranchSales, gocheeta.branch_tbl.Name  FROM ((gocheeta.booking_tbl \n" +
+"inner join gocheeta.vehicle_tbl on gocheeta.booking_tbl.VehicleID = gocheeta.vehicle_tbl.PK_NumberPlate) inner join gocheeta.branch_tbl on gocheeta.vehicle_tbl.BranchID = gocheeta.branch_tbl.PK_BranchID ) \n" +
+"  GROUP BY\n" +
+"    gocheeta.vehicle_tbl.BranchID;\n" +
+";");
+            //pat.setInt(1, i);
+            
+            ResultSet resultSet = pat.executeQuery();
+            
+            while(resultSet.next()) {
+               Booking booking = new Booking();
+               booking.setBranchName(resultSet.getString("branch_tbl.Name"));
+//               booking.setCreatedDate(resultSet.getString("CreatedDate"));
+//               booking.setSource(resultSet.getString("sourceLocation"));
+               booking.setPrice(resultSet.getBigDecimal("BranchSales"));
+               
+               
+               bookings.add(booking);
+           }
+            
+            
+        } catch(Exception e){
+            System.out.print(e.getMessage());
+        
+        }
+        return bookings;
+    }
+
     
     
 
@@ -358,7 +515,23 @@ public class SQLDB_Class implements DaoInterface{
     
     
     
-    
+    @Override
+    public boolean updateBookingRating(Booking booking) {
+        int rowsAffected = 0;
+        try {
+            PreparedStatement pat = conn.prepareStatement("UPDATE booking_tbl SET  Rate=?, RateMsg=?  WHERE PK_BookingID=? ");
+            pat.setInt(1, booking.getRate());
+            pat.setString(2, booking.getRateMsg());
+            pat.setInt(3, booking.getBookingID());
+            
+            rowsAffected = pat.executeUpdate();
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(BookingDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return rowsAffected>0;
+    }
     
     
 
@@ -1133,6 +1306,33 @@ public class SQLDB_Class implements DaoInterface{
         return rowsAffected > 0;
     
     }
+    
+    @Override
+    public Vehicle getVehicle(String vehID){
+         Vehicle vehicle = new Vehicle();
+         try {             
+            
+            Statement statement = conn.createStatement();
+            
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM `vehicle_tbl` WHERE PK_NumberPlate='"+vehID+"'");
+            if(resultSet.next()) {
+                
+                vehicle.setPlateNumber(resultSet.getString("PK_NumberPlate"));
+                vehicle.setName(resultSet.getString("Name"));
+                vehicle.setBranchID(resultSet.getInt("BranchID"));
+                vehicle.setCategoryID(resultSet.getInt("CategoryID"));
+                vehicle.setImagePath(resultSet.getString("ImagePath"));
+                vehicle.setSeat(resultSet.getInt("Seat"));
+                vehicle.setStatus(resultSet.getString("Status"));
+                vehicle.setColor(resultSet.getString("color"));
+                vehicle.setBaseFare(resultSet.getBigDecimal("BaseFare"));
+                
+            }
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+        return vehicle;
+    }
 
     @Override
     public boolean updateVehicleStatus(String numberPlate, String status) {
@@ -1172,6 +1372,7 @@ public class SQLDB_Class implements DaoInterface{
         }
         return DriverIds;
     }
+
 
     
     

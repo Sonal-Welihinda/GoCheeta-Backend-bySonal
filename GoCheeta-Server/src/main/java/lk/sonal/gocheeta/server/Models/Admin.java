@@ -9,24 +9,24 @@ package lk.sonal.gocheeta.server.Models;
  *
  * @author sonal
  */
-public class Admin {
+public class Admin extends RegisterdPerson{
     int Id;
-    private String name,email,phoneNumber,address,DOB,AccType,branch,gender,username,password;
+    private String DOB,AccType,branch,username;
 
     public Admin() {
     }
 
     public Admin(String name, String email, String phoneNumber, String address, String DOB, String AccType, String branch, String gender, String username, String password) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
+        this.Name = name;
+        this.Email = email;
+        this.PhoneNumber = phoneNumber;
+        this.Address = address;
         this.DOB = DOB;
         this.AccType = AccType;
         this.branch = branch;
-        this.gender = gender;
+        this.Gender = gender;
         this.username = username;
-        this.password = password;
+        this.Password = password;
     }
 
     public int getId() {
@@ -41,35 +41,35 @@ public class Admin {
     
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.Email = email;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return PhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.PhoneNumber = phoneNumber;
     }
 
     public String getAddress() {
-        return address;
+        return Address;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.Address = address;
     }
 
     public String getDOB() {
@@ -97,11 +97,11 @@ public class Admin {
     }
 
     public String getGender() {
-        return gender;
+        return Gender;
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        this.Gender = gender;
     }
 
     public String getUsername() {
@@ -113,10 +113,10 @@ public class Admin {
     }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.Password = password;
     }
 }

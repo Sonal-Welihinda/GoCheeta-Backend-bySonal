@@ -42,6 +42,14 @@ public class BookingService {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    public String getAllBooking() {
+        String result = BLayer.getAllBookings();
+        
+        return result;
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{i}")
     public String getDriverActiveBooking(@PathParam("i") int  i) {
         String result = BLayer.getDriversActiveBookings(i);
@@ -69,6 +77,47 @@ public class BookingService {
         } else {
             return Response.status(501).entity("Unable to Updated").build();
         }
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/Rating")
+    public Response updateBookingRating(String json){
+        
+        boolean result = BLayer.updateBookingRating(json);
+        if (result) {
+            return Response.status(201).entity("Successfully Added Rating").build();
+        } else {
+            return Response.status(501).entity("Unable to Add rating").build();
+        }
+    }
+    
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Customer/History/{i}")
+    public String getCustomerBookingHistory(@PathParam("i") int  i) {
+        String result = BLayer.getCustomerBookingHistory(i);
+        
+        return result;
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Sales")
+    public String getBookingSales() {
+        String result = BLayer.getBookingSales("");
+        
+        return result;
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Customer/{i}")
+    public String getCustomerOngoingBooking(@PathParam("i") int  customerID) {
+        String result = BLayer.getCustomerActiveBookings(customerID);
+        
+        return result;
     }
     
     

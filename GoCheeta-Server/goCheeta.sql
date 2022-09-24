@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `gocheeta` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `gocheeta`;
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: gocheeta
@@ -99,10 +97,12 @@ CREATE TABLE `booking_tbl` (
   `Price` decimal(10,2) DEFAULT NULL,
   `Status` varchar(45) DEFAULT NULL,
   `Distance` decimal(10,2) DEFAULT NULL,
+  `Rate` int DEFAULT NULL,
+  `RateMsg` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`PK_BookingID`),
   KEY `CustormerID_idx` (`CustormerID`),
   CONSTRAINT `CustormerID` FOREIGN KEY (`CustormerID`) REFERENCES `customer-tbl` (`PK_CustomerID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `booking_tbl` (
 
 LOCK TABLES `booking_tbl` WRITE;
 /*!40000 ALTER TABLE `booking_tbl` DISABLE KEYS */;
-INSERT INTO `booking_tbl` VALUES (1,'2022-09-19 19:44:42','2022-09-28 21:44:00',1,5,'GG-2222','Test1','test1s','test1d',210.00,'Complete',3.00);
+INSERT INTO `booking_tbl` VALUES (1,'2022-09-19 19:44:42','2022-09-28 21:44:00',1,5,'GG-2222','Test1','test1s','test1d',210.00,'Complete',3.00,4,'good okay'),(4,'2022-09-24 01:10:12','2022-10-05 04:10:00',1,5,'GG-2222','Test1','test1s','test1d',210.00,'ongoing',3.00,NULL,NULL);
 /*!40000 ALTER TABLE `booking_tbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,4 +300,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-09-21  8:34:13
+-- Dump completed on 2022-09-24 23:33:54

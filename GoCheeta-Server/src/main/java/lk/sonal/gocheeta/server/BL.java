@@ -573,7 +573,16 @@ public class BL {
     }
     
     public String getDriversActiveBookings(int i){
+//        System.out.println(DB_OBJECT.getDriversActiveBooking(i));
         return gson.toJson(DB_OBJECT.getDriversActiveBooking(i)) ;
+    }
+    
+    public String getAllBookings(){
+        List<Booking> list = DB_OBJECT.getAllBookings();
+        for(Booking trip :list){
+            trip.setVehicle(DB_OBJECT.getVehicle(trip.getVehicleID()));
+        }
+        return gson.toJson(list);
     }
     
     public String getDriversCompletedBookings(int i){
@@ -584,6 +593,37 @@ public class BL {
     public boolean updateBookingStatus(int i, String status){
         
         return DB_OBJECT.updateBookingStatus(i, status);
+    }
+    
+    public boolean updateBookingRating(String json){
+        Booking booking = gson.fromJson(json, Booking.class);
+        return DB_OBJECT.updateBookingRating(booking);
+    }
+    
+//    filter Booking Sales
+    
+    public String getBookingSales(String json){
+        List<Booking> list = DB_OBJECT.getBookingSales("", "", "");
+        return gson.toJson(list);
+    }
+    
+    
+    // Customer booking history
+    public String getCustomerBookingHistory(int i){
+        
+        List<Booking> list = DB_OBJECT.getCustomerBookingHistory(i);
+        
+        for(Booking trip :list){
+            trip.setVehicle(DB_OBJECT.getVehicle(trip.getVehicleID()));
+        }
+        
+        return gson.toJson(list) ;
+    }
+    
+    
+    public String getCustomerActiveBookings(int i){
+//        System.out.println(DB_OBJECT.getDriversActiveBooking(i));
+        return gson.toJson(DB_OBJECT.getCustomerActiveBooking(i)) ;
     }
     
     

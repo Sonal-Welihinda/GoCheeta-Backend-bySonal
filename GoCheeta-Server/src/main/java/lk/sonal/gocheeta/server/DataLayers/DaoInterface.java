@@ -29,7 +29,12 @@ public interface DaoInterface {
     public boolean AddBookng(Booking booking);
     public Booking getDriversActiveBooking(int DriverID);
     public boolean updateBookingStatus (int bookingID,String status);
+    public boolean updateBookingRating (Booking booking);
     public List<Booking> getDriversCompletedBookings(int i);
+    public List<Booking> getCustomerBookingHistory(int i);
+    public List<Booking> getAllBookings();
+    public Booking getCustomerActiveBooking(int CustomerID);
+    public List<Booking> getBookingSales(String startDate , String BranchID,String endDates);
     
     
     public boolean addBranch(Branch branch);
@@ -71,6 +76,7 @@ public interface DaoInterface {
     public boolean deleteVehicleAccess(Vehicle vehicle, int DriverID);
     public boolean AddVehicleAccessibility(Vehicle vehicle);
     public boolean AddOneVehicleAccessibility(Vehicle vehicle,int DriverID);
+    public Vehicle getVehicle(String vehID);
     public List<Vehicle> getVehicles();
     public List<Integer> getVehicleAccess(Vehicle vehicle);
     public List<Integer> getVehicleAccessAvailable(Vehicle vehicle);

@@ -8,19 +8,14 @@ package lk.sonal.gocheeta.server.Models;
  *
  * @author sonal
  */
-public class Driver {
+public class Driver extends RegisterdPerson{
     int id;
     String Imgbase64;
     String ImgLocation;
-    String Name;
-    String Email;
-    String Address;
     boolean ImgUpdated;
     int BranchID;
-    String ContactNumber;
     String DOB;
-    String gender;
-    String username,password;
+    String username;
     String Status;
 
     public Driver() {
@@ -68,11 +63,11 @@ public class Driver {
     }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.Password = password;
     }
     
     
@@ -120,11 +115,11 @@ public class Driver {
     }
 
     public String getContactNumber() {
-        return ContactNumber;
+        return PhoneNumber;
     }
 
     public void setContactNumber(String ContactNumber) {
-        this.ContactNumber = ContactNumber;
+        this.PhoneNumber = ContactNumber;
     }
 
     public String getDOB() {
@@ -136,11 +131,11 @@ public class Driver {
     }
 
     public String getGender() {
-        return gender;
+        return Gender;
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        this.Gender = gender;
     }
     
     
